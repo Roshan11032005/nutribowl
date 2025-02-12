@@ -56,6 +56,7 @@ const Page = () => {
       </Text>
 
       <View style={{marginBottom: 20 }}>
+      <Text style={styles.label}>Email</Text>
         <TextInput
           autoCapitalize='none'
           placeholder='Email'
@@ -63,6 +64,8 @@ const Page = () => {
           value={email}
           onChangeText={setEmail}
         />
+       
+       <Text style={styles.label}>Password</Text>
         <TextInput
           autoCapitalize='none'
           placeholder='Password'
@@ -119,7 +122,13 @@ const styles = StyleSheet.create({
   btnPrimaryText: {
     color: '#fff',
     fontSize: 16,
-  }
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#ffff',
+    marginBottom: 8,
+  },
 })
 
 export default Page;

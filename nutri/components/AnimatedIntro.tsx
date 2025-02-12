@@ -1,6 +1,5 @@
-
 import {ColorPalette} from '@/constants/Colors';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, {
   interpolate,
@@ -157,7 +156,7 @@ const AnimatedIntro = () => {
       if (next) {
         canGoToNext.value = false;
         currentX.value = withDelay(
-          1000,
+          1000, // Delay before returning to the start
           withTiming(
             half,
             {
@@ -176,6 +175,32 @@ const AnimatedIntro = () => {
     },
     [currentX, labelWidth]
   );
+
+  // Add a useEffect to trigger the animation loop every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!didPlay.value) {
+        didPlay.value = true;
+        currentX.value = withDelay(
+          5,
+          withTiming(
+            half + labelWidth.value / 2,
+            {
+              duration: 800,
+            },
+            (finished) => {
+              if (finished) {
+                canGoToNext.value = true;
+                isAtStart.value = false;
+              }
+            }
+          )
+        );
+      }
+    }, 2000); // 2 seconds interval
+
+    return () => clearInterval(interval);
+  }, [didPlay, currentX, labelWidth, half]);
 
   return (
     <Animated.View style={[styles.wrapper, style1]}>
@@ -202,14 +227,14 @@ const styles = StyleSheet.create({
     zIndex: 1,
     position: 'absolute',
     left: '0%',
-    height: 44,
+    height: 30, // Reduced height
   },
   ball: {
-    width: 40,
+    width: 30, // Reduced width
     zIndex: 10,
-    height: 40,
+    height: 30, // Reduced height
     backgroundColor: '#000',
-    borderRadius: 20,
+    borderRadius: 15, // Adjusted borderRadius to match new size
     position: 'absolute',
     left: '0%',
   },
@@ -217,13 +242,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   title: {
-    fontSize: 36,
+    fontSize: 24, // Reduced font size
     fontWeight: '600',
     left: '0%',
     position: 'absolute',
   },
   content: {
-    marginTop: 300,
+    marginTop: 150, // Reduced marginTop
   },
 });
 export default memo(AnimatedIntro);
